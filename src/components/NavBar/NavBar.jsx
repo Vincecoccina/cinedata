@@ -18,6 +18,8 @@ const NavBar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const classes = useStyles();
   const isMobile = useMediaQuery("(max-width: 600px)");
+ 
+
 
   const isAuth = true;
   return (
@@ -82,11 +84,7 @@ const NavBar = () => {
           ) : (
             <Drawer
               classes={{ paper: classes.drawerPaper }}
-              PaperProps={{
-                sx: {
-                  backgroundColor: "#1b1b1b",
-                },
-              }}
+              PaperProps={{ style: { backgroundColor: '#1b1b1b' } }}
               variant="permanent"
               open
             >

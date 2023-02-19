@@ -15,16 +15,10 @@ import useStyles from "./styles";
 
 const Sidebar = ({ setMobileOpen }) => {
   const classes = useStyles();
-  const styles = {
-    list: {
-      backgroundColor: '#1b1b1b',
-      color: 'Grey'
-    }
-  }
-
+  
   const categories = [
-    { label: "Popular", value: "popular" },
-    { label: "Top Rated", value: "top_rated" },
+    { label: "Films du moment", value: "popular" },
+    { label: "Les mieux notés", value: "top_rated" },
     { label: "A venir", value: "upcoming" },
   ];
 
@@ -46,7 +40,7 @@ const Sidebar = ({ setMobileOpen }) => {
       </Link>
       <Divider />
       <List>
-        <ListSubheader style={styles.list} >Catégories</ListSubheader>
+        <ListSubheader style={{ backgroundColor: '#222', color: "grey" }} >Catégories</ListSubheader>
         {categories.map(({ label, value }) => (
           <Link key={value} className={classes.links} to="/">
             <ListItem onClick={() => {}}>
@@ -60,7 +54,7 @@ const Sidebar = ({ setMobileOpen }) => {
       </List>
       <Divider />
       <List>
-        <ListSubheader style={styles.list} >Genres</ListSubheader>
+        <ListSubheader style={{ backgroundColor: '#222', color: "grey" }} >Genres</ListSubheader>
         {demoCategories.map(({ label, value }) => (
           <Link key={value} className={classes.links} to="/">
             <ListItem onClick={() => {}}>

@@ -1,0 +1,22 @@
+a{
+    text-decoration: none;
+    align-items: center;
+}
+
+.movieImg{
+    border-radius: 10px;
+    height: 300px;
+    margin-bottom: 5px;
+    transition: all 0.3s ease-in-out;
+}
+
+.movieImg:hover{
+    transform: scale(1.05);
+}
+
+@media screen and (max-width: 600px) {
+   a{
+    display: flex;
+    flex-direction: column;
+   }
+  }
