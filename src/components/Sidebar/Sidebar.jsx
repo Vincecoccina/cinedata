@@ -10,6 +10,8 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { selectGenreOrCategory } from "../../features/currentGenresOrCategory";
 import Logo from "../../assets/logo.png";
 import { useGetGenresQuery } from "../../services/TMDB";
 import genresIcons from "../../assets/genres";
@@ -17,11 +19,13 @@ import "./style.css";
 
 const Sidebar = ({ setMobileOpen }) => {
   const { data, isFetching } = useGetGenresQuery();
+  const {genreIdOrCategoryName} = useSelector((state) => state.currentGenreOrCategory);
+  const dispatch = useDispatch();
 
-  console.log(data);
+  
   const categories = [
     { label: "Films du moment", value: "popular" },
-    { label: "Les mieux notés", value: "topRated" },
+    { label: "Les mieux notés", value: "top_rated" },
     { label: "A venir", value: "upcoming" },
   ];
 
@@ -37,7 +41,7 @@ const Sidebar = ({ setMobileOpen }) => {
         </ListSubheader>
         {categories.map(({ label, value }) => (
           <Link key={value} className="links" to="/">
-            <ListItem onClick={() => {}}>
+            <ListItem onClick={() => dispatch(selectGenreOrCategory(value))}>
               <ListItemIcon>
                 <img
                   src={genresIcons[label.toLowerCase()]}
@@ -63,7 +67,7 @@ const Sidebar = ({ setMobileOpen }) => {
         ) : (
           data.genres.map(({ name, id }) => (
             <Link key={name} className="links" to="/">
-              <ListItem onClick={() => {}}>
+              <ListItem onClick={() => dispatch(selectGenreOrCategory(id))}>
                 <ListItemIcon>
                   <img
                     src={genresIcons[name.toLowerCase()]}

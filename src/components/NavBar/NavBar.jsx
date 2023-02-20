@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { Menu, AccountCircle } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import SearchBar from "../Search/SearchBar";
 import useStyles from "./styles";
 
 import Sidebar from "../Sidebar/Sidebar";
@@ -37,7 +38,7 @@ const NavBar = () => {
               <Menu />
             </IconButton>
           )}
-          {!isMobile && "Search..."}
+          {!isMobile && <SearchBar/>}
           <div>
             {!isAuth ? (
               <Button color="inherit" onClick={() => {}}>
@@ -60,7 +61,7 @@ const NavBar = () => {
               </Button>
             )}
           </div>
-          {isMobile && "Search..."}
+          {isMobile && <SearchBar/>}
         </Toolbar>
       </AppBar>
       <div>
