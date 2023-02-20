@@ -1,0 +1,25 @@
+.image{
+    width: 70%
+}
+
+.imageLink{
+    display: flex;
+    justify-content: center;
+    padding: 10% 0;
+}
+
+a{
+    color: white;
+    text-decoration: none;
+}
+
+a:hover{
+    color: orange;
+ 
+}
+
+
+.genreImg{
+    filter: invert(1);
+}
+

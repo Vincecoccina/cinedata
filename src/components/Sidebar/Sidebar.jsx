@@ -11,42 +11,41 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/logo.png";
-import useStyles from "./styles";
+import { useGetGenresQuery } from "../../services/TMDB";
+import genresIcons from "../../assets/genres";
+import "./style.css";
 
 const Sidebar = ({ setMobileOpen }) => {
-  const classes = useStyles();
-  
+  const { data, isFetching } = useGetGenresQuery();
+
+  console.log(data);
   const categories = [
     { label: "Films du moment", value: "popular" },
-    { label: "Les mieux notés", value: "top_rated" },
+    { label: "Les mieux notés", value: "topRated" },
     { label: "A venir", value: "upcoming" },
-  ];
-
-  const demoCategories = [
-    { label: "Action", value: "action" },
-    { label: "Horreur", value: "horror" },
-    { label: "Humour", value: "comedy" },
-    { label: "Animation", value: "animation" },
   ];
 
   return (
     <>
-      <Link to="/" className={classes.imageLink}>
-        <img
-          src={Logo}
-          alt="logo"
-          className={classes.image}
-        />
+      <Link to="/" className="imageLink">
+        <img src={Logo} alt="logo" className="image" />
       </Link>
       <Divider />
       <List>
-        <ListSubheader style={{ backgroundColor: '#222', color: "grey" }} >Catégories</ListSubheader>
+        <ListSubheader sx={{ backgroundColor: "#222", color: "grey" }}>
+          Catégories
+        </ListSubheader>
         {categories.map(({ label, value }) => (
-          <Link key={value} className={classes.links} to="/">
+          <Link key={value} className="links" to="/">
             <ListItem onClick={() => {}}>
-              {/* <ListItemIcon>
-                <img src="" alt="" />
-              </ListItemIcon> */}
+              <ListItemIcon>
+                <img
+                  src={genresIcons[label.toLowerCase()]}
+                  alt="Icone catégories"
+                  height={30}
+                  className="genreImg"
+                />
+              </ListItemIcon>
               <ListItemText primary={label} />
             </ListItem>
           </Link>
@@ -54,17 +53,30 @@ const Sidebar = ({ setMobileOpen }) => {
       </List>
       <Divider />
       <List>
-        <ListSubheader style={{ backgroundColor: '#222', color: "grey" }} >Genres</ListSubheader>
-        {demoCategories.map(({ label, value }) => (
-          <Link key={value} className={classes.links} to="/">
-            <ListItem onClick={() => {}}>
-              {/* <ListItemIcon>
-                <img src="" alt="" />
-              </ListItemIcon> */}
-              <ListItemText primary={label} />
-            </ListItem>
-          </Link>
-        ))}
+        <ListSubheader sx={{ backgroundColor: "#222", color: "grey" }}>
+          Genres
+        </ListSubheader>
+        {isFetching ? (
+          <Box display="flex" justifyContent="center">
+            <CircularProgress />
+          </Box>
+        ) : (
+          data.genres.map(({ name, id }) => (
+            <Link key={name} className="links" to="/">
+              <ListItem onClick={() => {}}>
+                <ListItemIcon>
+                  <img
+                    src={genresIcons[name.toLowerCase()]}
+                    alt="Icone catégories"
+                    height={30}
+                    className="genreImg"
+                  />
+                </ListItemIcon>
+                <ListItemText primary={name} />
+              </ListItem>
+            </Link>
+          ))
+        )}
       </List>
     </>
   );
