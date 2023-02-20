@@ -51,6 +51,9 @@ const NavBar = () => {
                 to={`/profile/:id`}
                 className={classes.linkButton}
                 onClick={() => {}}
+                sx={{
+                  fontSize:'10px'
+                }}
               >
                 {!isMobile && <>Mes films &nbsp;</>}
                 <Avatar
