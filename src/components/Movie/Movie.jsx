@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import "./Movie.css";
 
 const Movie = ({ movie, id }) => {
-
-
   return (
     <Grid item xs={12} sm={6} md={4} lg={3} xl={2} mt="15px" textAlign="center">
       <Grow in key={id} timeout={(id + 1) * 250}>
@@ -36,15 +34,17 @@ const Movie = ({ movie, id }) => {
           >
             {movie.title}
           </Typography>
-          <div
+          <Typography
+            variant="h6"
             className={`${movie.vote_average >= 7 && "greenMark"} 
             ${movie.vote_average >= 5 && movie.vote_average < 7 && "orangeMark"}
             ${movie.vote_average < 5 && "redMark"}
-            ${!movie.vote_average && "greyMark"}`
-            }
+            ${!movie.vote_average && "greyMark"}`}
           >
-            {`${movie.vote_average ? movie.vote_average.toFixed(1) : "Non noté"}`}
-          </div>
+            {`${
+              movie.vote_average ? movie.vote_average.toFixed(1) : "Non noté"
+            }`}
+          </Typography>
         </Link>
       </Grow>
     </Grid>

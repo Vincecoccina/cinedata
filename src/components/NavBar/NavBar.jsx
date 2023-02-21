@@ -9,35 +9,43 @@ import {
   Button,
   Avatar,
   useMediaQuery,
+  Typography,
 } from "@mui/material";
 import { Menu, AccountCircle } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchToken, createSessionId, movieApi } from "../../utils/index";
 import Sidebar from "../Sidebar/Sidebar";
 import SearchBar from "../Search/SearchBar";
 import useStyles from "./styles";
 
 const NavBar = () => {
-  const {isAuth, user} = useSelector(userSelector);
+  const { isAuth, user } = useSelector(userSelector);
   const [mobileOpen, setMobileOpen] = useState(false);
   const classes = useStyles();
+  const navigate = useNavigate();
   const isMobile = useMediaQuery("(max-width: 600px)");
   const dispatch = useDispatch();
   const token = localStorage.getItem("request_token");
   const session = localStorage.getItem("session_id");
 
-  console.log(user);
+  
 
   useEffect(() => {
     const loggIn = async () => {
       if (token) {
         if (session) {
-          const { data: userData } = await movieApi.get(`/account?session_id=${session}`);
-          dispatch(setUser(userData))
+          const { data: userData } = await movieApi.get(
+            `/account?session_id=${session}`
+          );
+          dispatch(setUser(userData));
+          navigate("/");
         } else {
           const sessionId = await createSessionId();
-          const { data: userData } = await movieApi.get(`/account?session_id=${sessionId}`);
-          dispatch(setUser(userData))
+          const { data: userData } = await movieApi.get(
+            `/account?session_id=${sessionId}`
+          );
+          dispatch(setUser(userData));
+          navigate("/");
         }
       }
     };
@@ -77,11 +85,18 @@ const NavBar = () => {
                   fontSize: "10px",
                 }}
               >
-                {!isMobile && <>Mes films &nbsp;</>}
+                {!isMobile && (
+                  <Typography
+                    variant="h6"
+                    sx={{ fontSize: "12px", fontWeight: "bold" }}
+                  >
+                    {user.username} &nbsp;
+                  </Typography>
+                )}
                 <Avatar
                   style={{ width: 30, height: 30 }}
                   alt="profile"
-                  src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png"
+                  src={user.avatar}
                 />
               </Button>
             )}
