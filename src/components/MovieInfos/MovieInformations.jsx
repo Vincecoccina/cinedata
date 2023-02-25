@@ -19,20 +19,23 @@ import {
   Favorite,
   FavoriteBorderOutlined,
   Remove,
-  ArrowBack,
 } from "@mui/icons-material";
+import MovieList from "../MovieList/MovieList";
 import { Link, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { useGetMovieQuery } from "../../services/TMDB";
-import { fontSize } from "@mui/system";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  useGetMovieQuery,
+  useGetRecommandationQuery,
+} from "../../services/TMDB";
 
 const MovieInformations = () => {
   const { id } = useParams();
   const { data, isFetching, error } = useGetMovieQuery(id);
+  const { data: recommandations, isFetching: isRecommandationFetching } =
+    useGetRecommandationQuery({ list: "/recommendations", movie_id: id });
   const isMobile = useMediaQuery("(max-width:600px)");
   const isNonDestop = useMediaQuery("(max-width:800px)");
-
   const isFavorite = true;
   const isMovieWatchList = true;
 
@@ -58,8 +61,6 @@ const MovieInformations = () => {
       </Box>
     );
   }
-
-  console.log(data);
 
   return (
     <Box
@@ -116,16 +117,22 @@ const MovieInformations = () => {
               <span style={{ color: "orange" }}>{formattedDate}</span> /{" "}
               {data?.runtime}min / {data?.genres[0].name}
             </Typography>
-            <ButtonGroup style={{ marginLeft: "10px", gap: "10px" }}>
-              <Tooltip title={isFavorite ? 'Retirer de ma liste' : 'Ajouter ce film à ma liste'}>
+            <ButtonGroup style={{ marginLeft: "15px", gap: "10px" }}>
+              <Tooltip
+                title={
+                  isFavorite
+                    ? "Retirer de ma liste"
+                    : "Ajouter ce film à ma liste"
+                }
+              >
                 <Button
                   onClick={addToFavourite}
+                  size="small"
                   sx={{
                     backgroundColor: "orange",
                     color: "white",
                     outline: "none",
                     border: "none",
-                    fontSize: "10px",
                     "&:hover": {
                       backgroundColor: "orange",
                       filter: "brightness(1.2)",
@@ -136,15 +143,21 @@ const MovieInformations = () => {
                   {isFavorite ? <Favorite /> : <FavoriteBorderOutlined />}
                 </Button>
               </Tooltip>
-              <Tooltip title={isMovieWatchList ? 'Retirer de ma watchlist' : 'Ajouter ce film à ma watchlist'}>
+              <Tooltip
+                title={
+                  isMovieWatchList
+                    ? "Retirer de ma watchlist"
+                    : "Ajouter ce film à ma watchlist"
+                }
+              >
                 <Button
-                  onClick={addToFavourite}
+                  onClick={addToWatchList}
+                  size="small"
                   sx={{
                     backgroundColor: "orange",
                     color: "white",
                     outline: "none",
                     border: "none",
-                    fontSize: "10px",
                     "&:hover": {
                       backgroundColor: "orange",
                       filter: "brightness(1.2)",
@@ -225,6 +238,9 @@ const MovieInformations = () => {
         alignItems={isMobile && "center"}
         marginTop="30px"
         width="100%"
+        padding="0 0 30px 0"
+        gutterBottom
+        borderBottom="1px solid grey"
       >
         <Typography variant="h5" sx={{ color: "#f1f1f1", fontWeight: "bold" }}>
           SYNOPSIS
@@ -238,6 +254,38 @@ const MovieInformations = () => {
             {data?.overview}
           </Typography>
         </Box>
+      </Box>
+
+      {data.videos.results.length > 0 && (
+        <Box
+          marginTop="5rem"
+          width="100%"
+          height="400px"
+          display="flex"
+          justifyContent="center"
+        >
+          <iframe
+            style={{ width: isNonDestop ? "100%" : "50%", height: "100%" }}
+            title="trailer"
+            src={`https://www.youtube.com/embed/${data.videos.results[0].key}`}
+          />
+        </Box>
+      )}
+
+      <Box marginTop="5rem" width="100%">
+        <Typography
+          variant="h3"
+          gutterBottom
+          align="center"
+          sx={{ color: "#f1f1f1", fontSize: "30px" }}
+        >
+          Vous pourriez aussi aimez ces films
+        </Typography>
+        {recommandations ? (
+          <MovieList movies={recommandations} numberOfMovies={10} />
+        ) : (
+          <Box>Désolé, nous n'avons rien à vous recommander</Box>
+        )}
       </Box>
     </Box>
   );

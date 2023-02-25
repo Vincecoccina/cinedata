@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const tmdbApiKey = process.env.REACT_APP_TMDB_KEY;
 
-
 export const tmdbApi = createApi({
   reducerPath: "tmdbApi",
   baseQuery: fetchBaseQuery({ baseUrl: "https://api.themoviedb.org/3" }),
@@ -14,7 +13,7 @@ export const tmdbApi = createApi({
     //*GET MOVIES BY CATEGORIES
     getMovies: builder.query({
       query: ({ genreIdOrCategoryName, page, searchQuery }) => {
-        if(searchQuery){
+        if (searchQuery) {
           return `https://api.themoviedb.org/3/search/movie?query=${searchQuery}&api_key=${tmdbApiKey}&language=fr-FR&page=${page}&include_adult=true`;
         }
 
@@ -37,9 +36,34 @@ export const tmdbApi = createApi({
     }),
 
     getMovie: builder.query({
-      query: (id) => `/movie/${id}?append_to_response=videos,credits&api_key=${tmdbApiKey}&language=fr-FR`
+      query: (id) =>
+        `/movie/${id}?append_to_response=videos,credits&api_key=${tmdbApiKey}&language=fr-FR`,
+    }),
+
+    getRecommandation: builder.query({
+      query: ({movie_id, list}) =>
+        `movie/${movie_id}/${list}?api_key=${tmdbApiKey}&language=fr-FR`,
+    }),
+
+    getActorsDetails : builder.query({
+      query: (id) => `/person/${id}?api_key=${tmdbApiKey}&language=fr-FR`
+    }),
+
+    getActorsIdMovies : builder.query({
+      query: ({id, page}) => `/discover/movie?with_cast=${id}&$page=${page}&api_key=${tmdbApiKey}&language=fr-FR`
     })
+
+
   }),
+
+ 
 });
 
-export const { useGetMoviesQuery, useGetGenresQuery, useGetMovieQuery } = tmdbApi;
+export const {
+  useGetMoviesQuery,
+  useGetGenresQuery,
+  useGetMovieQuery,
+  useGetRecommandationQuery,
+  useGetActorsDetailsQuery,
+  useGetActorsIdMoviesQuery
+} = tmdbApi;

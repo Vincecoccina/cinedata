@@ -2,7 +2,7 @@ import React from "react";
 import { Grid, useMediaQuery } from "@mui/material";
 import Movie from "../Movie/Movie";
 
-const MovieList = ({ movies }) => {
+const MovieList = ({ movies, numberOfMovies }) => {
   const isMobile = useMediaQuery("(min-width:600px)");
   return (
     <Grid
@@ -13,7 +13,7 @@ const MovieList = ({ movies }) => {
       justifyContent={isMobile ? "center" : "space-between"}
       overflow="hidden"
     >
-      {movies.results.map((movie, i) => (
+      {movies.results.slice(0, numberOfMovies).map((movie, i) => (
         <Movie key={i} id={i} movie={movie} />
       ))}
     </Grid>
