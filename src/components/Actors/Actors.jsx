@@ -12,14 +12,14 @@ import {
   useGetActorsIdMoviesQuery,
 } from "../../services/TMDB";
 import MovieList from "../MovieList/MovieList";
+import Pagination from "../Pagination/Pagination";
 
 const Actors = () => {
   const { id } = useParams();
-  const page = 1;
+  const [page, setPage] = useState(1);
   const { data, isFetching, error } = useGetActorsDetailsQuery(id);
   const { data: movies } = useGetActorsIdMoviesQuery({ id, page });
   const isNonDestop = useMediaQuery("(max-width:800px)");
-  console.log(movies);
 
   //DATE
   const date = new Date(data?.birthday);
@@ -183,6 +183,7 @@ const Actors = () => {
           Les films avec {data?.name}
         </Typography>
         {movies && <MovieList movies={movies} numberOfMovies={10} />}
+        <Pagination currentPage={page} setPage={setPage} totalPages={movies?.total_pages}/>
       </Box>
     </>
   );

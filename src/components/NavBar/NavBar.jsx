@@ -38,14 +38,14 @@ const NavBar = () => {
             `/account?session_id=${session}`
           );
           dispatch(setUser(userData));
-          navigate("/");
+         
         } else {
           const sessionId = await createSessionId();
           const { data: userData } = await movieApi.get(
             `/account?session_id=${sessionId}`
           );
           dispatch(setUser(userData));
-          navigate("/");
+          
         }
       }
     };
@@ -96,7 +96,7 @@ const NavBar = () => {
                 <Avatar
                   style={{ width: 30, height: 30 }}
                   alt="profile"
-                  src={user.avatar}
+                  src={`${user.avatar}`}
                 />
               </Button>
             )}

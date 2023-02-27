@@ -12,7 +12,7 @@ const App = () => {
 
   return (
     <div className={classes.root}>
-      <BrowserRouter>
+      
         <CssBaseline />
         <NavBar/>
         <main className={classes.content}>
@@ -24,7 +24,7 @@ const App = () => {
             <Route path="/profile/:id" element={<Profile />} />
           </Routes>
         </main>
-      </BrowserRouter>
+
     </div>
   );
 };

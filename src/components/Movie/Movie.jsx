@@ -24,7 +24,7 @@ const Movie = ({ movie, id }) => {
               fontWeight: "bold",
               fontSize: "14px",
               textOverflow: "ellipsis",
-              width: "200px",
+              width: "95%",
               whiteSpace: "nowrap",
               overflow: "hidden",
               mt: "10px",

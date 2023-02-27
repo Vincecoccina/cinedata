@@ -40,30 +40,32 @@ export const tmdbApi = createApi({
         `/movie/${id}?append_to_response=videos,credits&api_key=${tmdbApiKey}&language=fr-FR`,
     }),
 
+    getList: builder.query({
+      query: ({ listName, accountId, sessionId, page }) =>
+        `/account/${accountId}/${listName}?api_key=${tmdbApiKey}&session_id=${sessionId}&page=${page}&language=fr-FR`,
+    }),
     getRecommandation: builder.query({
-      query: ({movie_id, list}) =>
+      query: ({ movie_id, list }) =>
         `movie/${movie_id}/${list}?api_key=${tmdbApiKey}&language=fr-FR`,
     }),
 
-    getActorsDetails : builder.query({
-      query: (id) => `/person/${id}?api_key=${tmdbApiKey}&language=fr-FR`
+    getActorsDetails: builder.query({
+      query: (id) => `/person/${id}?api_key=${tmdbApiKey}&language=fr-FR`,
     }),
 
-    getActorsIdMovies : builder.query({
-      query: ({id, page}) => `/discover/movie?with_cast=${id}&$page=${page}&api_key=${tmdbApiKey}&language=fr-FR`
-    })
-
-
+    getActorsIdMovies: builder.query({
+      query: ({ id, page }) =>
+        `/discover/movie?with_cast=${id}&page=${page}&api_key=${tmdbApiKey}&language=fr-FR`,
+    }),
   }),
-
- 
 });
 
 export const {
   useGetMoviesQuery,
   useGetGenresQuery,
   useGetMovieQuery,
+  useGetListQuery,
   useGetRecommandationQuery,
   useGetActorsDetailsQuery,
-  useGetActorsIdMoviesQuery
+  useGetActorsIdMoviesQuery,
 } = tmdbApi;

@@ -1,12 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
-  Modal,
   Typography,
   Box,
   CircularProgress,
   Button,
   ButtonGroup,
-  Grid,
   useMediaQuery,
   Rating,
   Tooltip,
@@ -20,27 +18,81 @@ import {
   FavoriteBorderOutlined,
   Remove,
 } from "@mui/icons-material";
-import MovieList from "../MovieList/MovieList";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import MovieList from "../MovieList/MovieList";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  useGetListQuery,
   useGetMovieQuery,
   useGetRecommandationQuery,
 } from "../../services/TMDB";
+import { userSelector } from "../../features/auth";
 
 const MovieInformations = () => {
-  const { id } = useParams();
-  const { data, isFetching, error } = useGetMovieQuery(id);
-  const { data: recommandations, isFetching: isRecommandationFetching } =
-    useGetRecommandationQuery({ list: "/recommendations", movie_id: id });
   const isMobile = useMediaQuery("(max-width:600px)");
   const isNonDestop = useMediaQuery("(max-width:800px)");
-  const isFavorite = true;
-  const isMovieWatchList = true;
+  const { user } = useSelector(userSelector);
+  const { id } = useParams();
 
-  const addToFavourite = () => {};
-  const addToWatchList = () => {};
+  const { data: recommandations, isFetching: isRecommandationFetching } =
+    useGetRecommandationQuery({ list: "/recommendations", movie_id: id });
+  const { data: favoriteMovies } = useGetListQuery({
+    listName: "favorite/movies",
+    accountId: user.id,
+    sessionId: localStorage.getItem("session_id"),
+    page: 1,
+  });
+  const { data: watchlist } = useGetListQuery({
+    listName: "watchlist/movies",
+    accountId: user.id,
+    sessionId: localStorage.getItem("session_id"),
+    page: 1,
+  });
+  const { data, isFetching, error } = useGetMovieQuery(id);
+
+  const [isMovieFavorited, setIsMovieFavorited] = useState(false);
+  const [isMovieWatchListed, setIsMovieWatchListed] = useState(false);
+
+  useEffect(() => {
+    setIsMovieFavorited(
+      favoriteMovies?.results?.find((movie) => movie?.id === data?.id)
+    );
+  }, [favoriteMovies, data]);
+
+  useEffect(() => {
+    setIsMovieWatchListed(
+      !!watchlist?.results?.find((movie) => movie?.id === data?.id)
+    );
+  }, [watchlist, data]);
+
+  const addToFavourite = async () => {
+    await axios.post(
+      `https://api.themoviedb.org/3/account/${user.id}/favorite?api_key=${
+        process.env.REACT_APP_TMDB_KEY
+      }&session_id=${localStorage.getItem("session_id")}`,
+      {
+        media_type: "movie",
+        media_id: id,
+        favorite: !isMovieFavorited,
+      }
+    );
+    setIsMovieFavorited((prev) => !prev);
+  };
+
+  const addToWatchList = async () => {
+    await axios.post(
+      `https://api.themoviedb.org/3/account/${user.id}/watchlist?api_key=${
+        process.env.REACT_APP_TMDB_KEY
+      }&session_id=${localStorage.getItem("session_id")}`,
+      {
+        media_type: "movie",
+        media_id: id,
+        watchlist: !isMovieWatchListed,
+      }
+    );
+    setIsMovieWatchListed((prev) => !prev);
+  };
 
   const date = new Date(data?.release_date);
   const options = { day: "numeric", month: "long", year: "numeric" };
@@ -64,7 +116,6 @@ const MovieInformations = () => {
 
   return (
     <Box
-      container
       display="flex"
       flexDirection="column"
       flexWrap="wrap"
@@ -74,7 +125,6 @@ const MovieInformations = () => {
     >
       <Typography
         variant="h3"
-        gutterBottom
         sx={{ color: "#f1f1f1", fontSize: "30px" }}
       >
         {data?.title}
@@ -120,7 +170,7 @@ const MovieInformations = () => {
             <ButtonGroup style={{ marginLeft: "15px", gap: "10px" }}>
               <Tooltip
                 title={
-                  isFavorite
+                  isMovieFavorited
                     ? "Retirer de ma liste"
                     : "Ajouter ce film à ma liste"
                 }
@@ -140,12 +190,12 @@ const MovieInformations = () => {
                     },
                   }}
                 >
-                  {isFavorite ? <Favorite /> : <FavoriteBorderOutlined />}
+                  {isMovieFavorited ? <Favorite /> : <FavoriteBorderOutlined />}
                 </Button>
               </Tooltip>
               <Tooltip
                 title={
-                  isMovieWatchList
+                  isMovieWatchListed
                     ? "Retirer de ma watchlist"
                     : "Ajouter ce film à ma watchlist"
                 }
@@ -165,7 +215,7 @@ const MovieInformations = () => {
                     },
                   }}
                 >
-                  {isMovieWatchList ? <Remove /> : <PlusOne />}
+                  {isMovieWatchListed ? <Remove /> : <PlusOne />}
                 </Button>
               </Tooltip>
             </ButtonGroup>
@@ -239,7 +289,6 @@ const MovieInformations = () => {
         marginTop="30px"
         width="100%"
         padding="0 0 30px 0"
-        gutterBottom
         borderBottom="1px solid grey"
       >
         <Typography variant="h5" sx={{ color: "#f1f1f1", fontWeight: "bold" }}>
@@ -275,7 +324,7 @@ const MovieInformations = () => {
       <Box marginTop="5rem" width="100%">
         <Typography
           variant="h3"
-          gutterBottom
+
           align="center"
           sx={{ color: "#f1f1f1", fontSize: "30px" }}
         >
