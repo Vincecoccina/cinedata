@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Grid, Tooltip, Rating, Grow } from "@mui/material";
+import { Typography, Grid, Grow } from "@mui/material";
 import { Link } from "react-router-dom";
 import "./Movie.css";
 

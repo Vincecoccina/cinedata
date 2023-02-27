@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Menu, AccountCircle } from "@mui/icons-material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { fetchToken, createSessionId, movieApi } from "../../utils/index";
 import Sidebar from "../Sidebar/Sidebar";
 import SearchBar from "../Search/SearchBar";
@@ -28,8 +28,6 @@ const NavBar = () => {
   const token = localStorage.getItem("request_token");
   const session = localStorage.getItem("session_id");
 
-  
-
   useEffect(() => {
     const loggIn = async () => {
       if (token) {
@@ -38,14 +36,13 @@ const NavBar = () => {
             `/account?session_id=${session}`
           );
           dispatch(setUser(userData));
-         
         } else {
           const sessionId = await createSessionId();
           const { data: userData } = await movieApi.get(
             `/account?session_id=${sessionId}`
           );
           dispatch(setUser(userData));
-          
+          navigate("/");
         }
       }
     };
@@ -96,7 +93,7 @@ const NavBar = () => {
                 <Avatar
                   style={{ width: 30, height: 30 }}
                   alt="profile"
-                  src={`${user.avatar}`}
+                  src={`https://www.themoviedb.org/t/p/w64_and_h64_face${user?.avatar?.tmdb?.avatar_path}`}
                 />
               </Button>
             )}

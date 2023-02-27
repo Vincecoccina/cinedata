@@ -19,10 +19,15 @@ import "./style.css";
 
 const Sidebar = ({ setMobileOpen }) => {
   const { data, isFetching } = useGetGenresQuery();
-  const {genreIdOrCategoryName} = useSelector((state) => state.currentGenreOrCategory);
+  const { genreIdOrCategoryName } = useSelector(
+    (state) => state.currentGenreOrCategory
+  );
   const dispatch = useDispatch();
 
-  
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [genreIdOrCategoryName]);
+
   const categories = [
     { label: "Films du moment", value: "popular" },
     { label: "Les mieux notés", value: "top_rated" },

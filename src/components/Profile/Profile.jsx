@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Typography, Button, Box} from "@mui/material";
 import Pagination from "../Pagination/Pagination";
-import { ExitToApp } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../features/auth";
 import { useGetListQuery } from "../../services/TMDB";
@@ -36,7 +35,6 @@ const Profile = () => {
     window.location.href = "/";
   };
 
-  console.log(favoriteMovies?.results)
 
   return (
     <Box>

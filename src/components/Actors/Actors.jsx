@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import {
   Box,
   Typography,
-  Button,
   CircularProgress,
   useMediaQuery,
 } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   useGetActorsDetailsQuery,
   useGetActorsIdMoviesQuery,
