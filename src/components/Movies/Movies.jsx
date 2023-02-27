@@ -10,11 +10,18 @@ import MovieList from "../MovieList/MovieList";
 import { selectGenreOrCategory } from "../../features/currentGenresOrCategory";
 import Pagination from "../Pagination/Pagination";
 import { useGetMoviesQuery } from "../../services/TMDB";
+import FeaturedMovie from "../FeaturedMovie/FeaturedMovie";
 
 const Movies = () => {
   const [page, setPage] = useState(1);
-  const {genreIdOrCategoryName, searchQuery} = useSelector((state) => state.currentGenreOrCategory);
-  const { data, error, isFetching } = useGetMoviesQuery({genreIdOrCategoryName, page, searchQuery});
+  const { genreIdOrCategoryName, searchQuery } = useSelector(
+    (state) => state.currentGenreOrCategory
+  );
+  const { data, error, isFetching } = useGetMoviesQuery({
+    genreIdOrCategoryName,
+    page,
+    searchQuery,
+  });
 
   if (isFetching) {
     return (
@@ -26,16 +33,23 @@ const Movies = () => {
 
   if (!data.results.length) {
     <Box display="flex" alignItems="center" mt="20px">
-      <Typography variant="h4">Aucun films ne correspond à votre recherche.</Typography>
-    </Box>
+      <Typography variant="h4">
+        Aucun films ne correspond à votre recherche.
+      </Typography>
+    </Box>;
   }
 
-  if(error) return 'Une erreur s\'est produite'; 
+  if (error) return "Une erreur s'est produite";
 
   return (
     <Box>
+      <FeaturedMovie movie={data.results[0]} />
       <MovieList movies={data} />
-      <Pagination currentPage={page} setPage={setPage} totalPages={data.total_pages}/>
+      <Pagination
+        currentPage={page}
+        setPage={setPage}
+        totalPages={data.total_pages}
+      />
     </Box>
   );
 };
